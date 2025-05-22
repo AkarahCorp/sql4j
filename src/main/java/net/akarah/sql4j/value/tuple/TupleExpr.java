@@ -12,21 +12,4 @@ public record TupleExpr<T extends Tuple>(List<Expression<?>> expressions) implem
     public String toSql() {
         return StringUtils.parenthesizedValues(this.expressions, SqlConvertible::toSql);
     }
-
-    @Override
-    public Stream<String> columns() {
-        return this.expressions.stream()
-                .flatMap(Expression::columns);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public T getValueFromList(List<Object> objects) {
-        return switch (objects.size()) {
-            case 1 -> (T) objects.getFirst();
-            case 2 -> (T) new Tuple.Of2<>(objects.getFirst(), objects.get(1));
-            case 3 -> (T) new Tuple.Of3<>(objects.getFirst(), objects.get(1), objects.get(2));
-            default -> throw new RuntimeException("not possible");
-        };
-    }
 }

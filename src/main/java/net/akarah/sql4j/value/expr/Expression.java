@@ -10,13 +10,37 @@ public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
         return this;
     }
 
-    default Stream<String> columns() { return Stream.of("?column?"); }
-
-    @SuppressWarnings("unchecked")
-    default T getValueFromList(List<Object> objects) { return (T) objects.getFirst(); }
+    default String column() { return "?column?"; }
 
     default Expression<T> add(Expression<T> other) {
-        var value = this;
-        return () -> value.toSql() + " + " + other.toSql();
+        return () -> this.toSql() + " + " + other.toSql();
+    }
+
+    default Expression<T> sub(Expression<T> other) {
+        return () -> this.toSql() + " - " + other.toSql();
+    }
+
+    default Expression<Boolean> equals(Expression<T> other) {
+        return () -> this.toSql() + " = " + other.toSql();
+    }
+
+    default Expression<Boolean> notEquals(Expression<T> other) {
+        return () -> this.toSql() + " <> " + other.toSql();
+    }
+
+    default Expression<Boolean> greaterThan(Expression<T> other) {
+        return () -> this.toSql() + " > " + other.toSql();
+    }
+
+    default Expression<Boolean> lessThan(Expression<T> other) {
+        return () -> this.toSql() + " < " + other.toSql();
+    }
+
+    default Expression<Boolean> greaterThanOrEquals(Expression<T> other) {
+        return () -> this.toSql() + " >= " + other.toSql();
+    }
+
+    default Expression<Boolean> lessThanOrEquals(Expression<T> other) {
+        return () -> this.toSql() + " <= " + other.toSql();
     }
 }

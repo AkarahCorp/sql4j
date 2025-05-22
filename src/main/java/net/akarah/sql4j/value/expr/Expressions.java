@@ -31,12 +31,12 @@ public final class Expressions {
         return new Expression<>() {
             @Override
             public String toSql() {
-                return column.tabledName();
+                return column.name();
             }
 
             @Override
-            public Stream<String> columns() {
-                return Stream.of(column.name());
+            public String column() {
+                return column.name();
             }
         };
     }

@@ -99,10 +99,9 @@ public class Database {
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);
             var r = stmt.executeQuery();
-            System.out.println(fmtStmt);
             return r;
         } catch (SQLException e) {
-            System.out.println("failed: " + fmtStmt);
+            System.out.println("Statement failed: " + fmtStmt);
             throw new RuntimeException(e);
         }
     }
@@ -113,9 +112,8 @@ public class Database {
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);
             stmt.execute();
-            System.out.println(fmtStmt);
         } catch (SQLException e) {
-            System.out.println("failed: " + fmtStmt);
+            System.out.println("Statement failed: " + fmtStmt);
             throw new RuntimeException(e);
         }
     }

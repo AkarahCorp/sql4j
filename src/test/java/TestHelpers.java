@@ -16,5 +16,5 @@ public class TestHelpers {
             .dropIfExists()
             .createIfNotExists();
 
-    QueryTests queryTests;
+    QueryTests queryTests = new QueryTests();
 }
