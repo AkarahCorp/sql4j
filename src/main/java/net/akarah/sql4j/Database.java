@@ -1,8 +1,6 @@
 package net.akarah.sql4j;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -50,11 +48,13 @@ public class Database {
     public Connection connection() {
         try {
             Class.forName("org.postgresql.Driver");
-            return DriverManager.getConnection("jdbc:postgresql://" + this.hostname + "/" + this.databaseName, username, password);
+            if(this.connection == null) {
+                this.connection = DriverManager.getConnection("jdbc:postgresql://" + this.hostname + "/" + this.databaseName, username, password);
+            }
+            return this.connection;
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public record Properties(String hostname, String username, String password) {
