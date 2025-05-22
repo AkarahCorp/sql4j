@@ -1,0 +1,45 @@
+package net.akarah.sql4j.table;
+
+import net.akarah.sql4j.Database;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Table {
+    Database database;
+    String name;
+    List<Column<?>> columns = new ArrayList<>();
+
+    private Table() {}
+
+    public static Table of(Database database, String name) {
+        var table = new Table();
+        table.name = name;
+        table.database = database;
+        return table;
+    }
+
+    public <T> Table withColumn(Column<T> column) {
+        this.columns.add(column);
+        return this;
+    }
+
+    public Table dropIfExists() {
+        this.database.executeStatement("DROP TABLE IF EXISTS " + this.name);
+        return this;
+    }
+
+    public Table createIfNotExists() {
+        var sb = new StringBuilder();
+        sb.append("CREATE TABLE IF NOT EXISTS ");
+        sb.append(this.name);
+        sb.append(" (");
+        for(var column : this.columns) {
+            sb.append(column.toSql());
+        }
+        sb.append(");");
+        this.database.executeStatement(sb.toString());
+        return this;
+    }
+
+}

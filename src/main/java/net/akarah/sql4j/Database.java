@@ -1,5 +1,7 @@
 package net.akarah.sql4j;
 
+import net.akarah.sql4j.table.Table;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -55,6 +57,20 @@ public class Database {
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void executeStatement(String statement) {
+        var newStatement = statement.replace("\n", "").replace(",)", ")");
+        try {
+            this.connection().prepareStatement(newStatement).execute();
+        } catch (SQLException exception) {
+            System.out.println("Statement failed: " + newStatement);
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public Table createTable(String name) {
+        return Table.of(this, name);
     }
 
     public record Properties(String hostname, String username, String password) {
