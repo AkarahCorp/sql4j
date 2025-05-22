@@ -5,6 +5,7 @@ import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.Expression;
 import net.akarah.sql4j.value.Type;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,23 +20,7 @@ public class TestHelpers {
     public static Table PLAYERS_TABLE = DATABASE.createTable("players")
             .withColumn(PLAYER_NAME)
             .withColumn(PLAYER_AGE)
-            .dropIfExists()
             .createIfNotExists();
 
-    @Test
-    public void testSelection() {
-        DATABASE.execute(
-                Select.on(Expression.of(PLAYER_NAME, PLAYER_AGE))
-                        .from(PLAYERS_TABLE)
-        );
-    }
-
-    @Test
-    public void testAddition() throws SQLException {
-        var result = DATABASE.evaluate(
-                Select.on(Expression.of(1).add(Expression.of(1)))
-        );
-        result.next();
-        assert result.getInt("?column?") == 2;
-    }
+    QueryTests queryTests;
 }

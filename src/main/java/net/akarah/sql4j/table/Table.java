@@ -1,6 +1,7 @@
 package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
+import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.Expression;
 import net.akarah.sql4j.value.IntoExpression;
 
@@ -46,7 +47,7 @@ public class Table implements IntoExpression<Table> {
         sb.append(this.name);
         sb.append(" (");
         for(var column : this.columns) {
-            sb.append(column.toSql());
+            sb.append(column.toSql(SqlConvertible.Position.VALUE));
         }
         sb.append(");");
         this.database.executeStatement(sb.toString());

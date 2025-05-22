@@ -1,14 +1,17 @@
 package net.akarah.sql4j.instruction;
 
+import net.akarah.sql4j.Database;
+import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.Expression;
 import net.akarah.sql4j.value.IntoExpression;
+import net.akarah.sql4j.value.QueryResult;
+
+import java.sql.SQLException;
 
 public class Select<T> implements Instruction<T> {
     Expression<T> baseExpression;
     Expression<Table> table;
-
-
 
     public static <T> Select<T> on(IntoExpression<T> baseExpression) {
         var sel = new Select<T>();
@@ -22,15 +25,31 @@ public class Select<T> implements Instruction<T> {
     }
 
     @Override
-    public String toSql() {
+    public String toSql(Position position) {
         var sb = new StringBuilder();
         sb.append("SELECT ");
-        sb.append(baseExpression.toSql());
+        sb.append(baseExpression.toSql(Position.SELECTOR));
         if(this.table != null) {
             sb.append(" FROM ");
-            sb.append(this.table.toSql());
+            sb.append(this.table.toSql(Position.VALUE));
         }
         sb.append(";");
         return sb.toString();
+    }
+
+    @Override
+    public QueryResult<T> evaluate(Database database) {
+        var resultSet = database.evaluate(this);
+        var queryResult = QueryResult.<T>of(resultSet, (int) this.baseExpression.columns().count());
+
+        queryResult.withFunction(
+                resultSet2 ->
+                            this.baseExpression.getValueFromList(
+                                    this.baseExpression.columns()
+                                            .map(name -> ExceptionUtils.sneakyThrows(() -> resultSet2.getObject(name)))
+                                            .toList()
+                            )
+        );
+        return queryResult;
     }
 }

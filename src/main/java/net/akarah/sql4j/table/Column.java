@@ -21,7 +21,7 @@ public class Column<T> implements SqlConvertible, IntoExpression<Column<T>> {
         return this.table.name() + "." + this.name();
     }
 
-    public String toSql() {
+    public String toSql(Position position) {
         return name
                 + " " + type.toSql()
                 + (type.isNullable() ? "" : " NOT NULL")
