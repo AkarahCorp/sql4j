@@ -4,10 +4,19 @@ import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.Type;
 
 public class Column<T> implements SqlConvertible {
+    Table table;
     String name;
     Type<T> type;
 
     private Column() {
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    public String tabledName() {
+        return this.table.name() + "." + this.name();
     }
 
     public String toSql() {
@@ -22,5 +31,9 @@ public class Column<T> implements SqlConvertible {
         c.name = name;
         c.type = type;
         return c;
+    }
+
+    public Table table() {
+        return this.table;
     }
 }

@@ -1,11 +1,13 @@
 package net.akarah.sql4j;
 
 import net.akarah.sql4j.table.Table;
+import net.akarah.sql4j.value.Expression;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Database {
@@ -88,6 +90,18 @@ public class Database {
             var hostname = (String) props.remove("hostname");
 
             return new Database.Properties(hostname, username, password);
+        }
+    }
+
+    public <T> ResultSet evaluate(Expression<T> expr) {
+        try {
+            var rawStmt = "SELECT " + expr.toSql() + ";";
+            var fmtStmt = rawStmt.replace("\n", "").replace(",)", ")");
+            var stmt = this.connection().prepareStatement(fmtStmt);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("failed: " + "SELECT " + expr.toSql() + ";");
+            throw new RuntimeException(e);
         }
     }
 }

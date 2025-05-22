@@ -1,6 +1,7 @@
 package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
+import net.akarah.sql4j.value.Expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,16 @@ public class Table {
         return table;
     }
 
+    public Database database() {
+        return this.database;
+    }
+
+    public String name() {
+        return this.name;
+    }
+
     public <T> Table withColumn(Column<T> column) {
+        column.table = this;
         this.columns.add(column);
         return this;
     }
@@ -41,5 +51,4 @@ public class Table {
         this.database.executeStatement(sb.toString());
         return this;
     }
-
 }
