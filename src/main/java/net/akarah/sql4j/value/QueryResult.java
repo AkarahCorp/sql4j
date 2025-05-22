@@ -5,42 +5,65 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class QueryResult<T> implements AutoCloseable {
-    ResultSet resultSet;
-    int size = 0;
-    Function<ResultSet, T> listFunction;
+public sealed interface QueryResult<T> extends AutoCloseable {
+    Optional<T> next();
 
-    private QueryResult() {}
+    @Override
+    void close();
 
-    public static <T> QueryResult<T> of(ResultSet resultSet, int size) {
-        var qr = new QueryResult<T>();
+    static <T> QueryResult.Impl<T> of(ResultSet resultSet, int size) {
+        var qr = new QueryResult.Impl<T>();
         qr.resultSet = resultSet;
         qr.size = size;
         return qr;
     }
 
-    public void withFunction(Function<ResultSet, T> listFunction) {
-        this.listFunction = listFunction;
+    static <T> QueryResult.Empty<T> empty() {
+        return new Empty<>();
     }
 
-    public Optional<T> next() {
-        try {
-            if(this.resultSet.next()) {
-                return Optional.of(this.listFunction.apply(this.resultSet));
-            } else {
-                return Optional.empty();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    final class Empty<T> implements QueryResult<T>, AutoCloseable {
+        @Override
+        public Optional<T> next() {
+            return Optional.empty();
+        }
+
+        @Override
+        public void close() {
+
         }
     }
 
-    @Override
-    public void close() {
-        try {
-            resultSet.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    final class Impl<T> implements QueryResult<T>, AutoCloseable {
+        ResultSet resultSet;
+        int size = 0;
+        Function<ResultSet, T> listFunction;
+
+        private Impl() {}
+
+        public void withFunction(Function<ResultSet, T> listFunction) {
+            this.listFunction = listFunction;
+        }
+
+        public Optional<T> next() {
+            try {
+                if(this.resultSet.next()) {
+                    return Optional.of(this.listFunction.apply(this.resultSet));
+                } else {
+                    return Optional.empty();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void close() {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

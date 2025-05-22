@@ -20,6 +20,7 @@ public class TestHelpers {
     public static Table PLAYERS_TABLE = DATABASE.createTable("players")
             .withColumn(PLAYER_NAME)
             .withColumn(PLAYER_AGE)
+            .dropIfExists()
             .createIfNotExists();
 
     QueryTests queryTests;

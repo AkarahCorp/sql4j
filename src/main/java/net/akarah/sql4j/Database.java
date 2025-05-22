@@ -115,7 +115,7 @@ public class Database {
 
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);
-            var resultSet = stmt.executeQuery();
+            stmt.execute();
             System.out.println(fmtStmt);
         } catch (SQLException e) {
             System.out.println("failed: " + fmtStmt);

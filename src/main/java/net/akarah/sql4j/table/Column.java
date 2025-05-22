@@ -5,7 +5,7 @@ import net.akarah.sql4j.value.Expression;
 import net.akarah.sql4j.value.IntoExpression;
 import net.akarah.sql4j.value.Type;
 
-public class Column<T> implements SqlConvertible, IntoExpression<Column<T>> {
+public class Column<T> implements SqlConvertible, IntoExpression<T> {
     Table table;
     String name;
     Type<T> type;
@@ -40,7 +40,7 @@ public class Column<T> implements SqlConvertible, IntoExpression<Column<T>> {
     }
 
     @Override
-    public Expression<Column<T>> intoExpression() {
+    public Expression<T> intoExpression() {
         return Expression.of(this);
     }
 }

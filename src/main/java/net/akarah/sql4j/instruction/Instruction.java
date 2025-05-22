@@ -4,6 +4,6 @@ import net.akarah.sql4j.Database;
 import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.QueryResult;
 
-public interface Instruction<T> extends SqlConvertible {
+public sealed interface Instruction<T> extends SqlConvertible permits Insert, Select {
     QueryResult<T> evaluate(Database database);
 }

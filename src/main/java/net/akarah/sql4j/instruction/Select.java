@@ -9,7 +9,7 @@ import net.akarah.sql4j.value.QueryResult;
 
 import java.sql.SQLException;
 
-public class Select<T> implements Instruction<T> {
+public final class Select<T> implements Instruction<T> {
     Expression<T> baseExpression;
     Expression<Table> table;
 

@@ -23,7 +23,7 @@ public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
     }
 
     static Expression<String> of(String value) {
-        return position -> '"' + value + '"';
+        return position -> "'" + value + "'";
     }
 
     static <T1, T2> Expression<Tuple.Of2<T1, T2>> of(IntoExpression<T1> a, IntoExpression<T2> b) {
@@ -34,7 +34,7 @@ public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
         return new TupleExpr<>(List.of(a.intoExpression(), b.intoExpression(), c.intoExpression()));
     }
 
-    static <T> Expression<Column<T>> of(Column<T> column) {
+    static <T> Expression<T> of(Column<T> column) {
         return new Expression<>() {
             @Override
             public String toSql(Position position) {
