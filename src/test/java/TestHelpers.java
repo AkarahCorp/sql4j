@@ -1,14 +1,7 @@
 import net.akarah.sql4j.Database;
-import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.Expression;
 import net.akarah.sql4j.value.Type;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class TestHelpers {
     public static Database DATABASE = Database.create("testing_database")

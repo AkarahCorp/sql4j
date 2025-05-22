@@ -1,7 +1,6 @@
-package net.akarah.sql4j.value;
+package net.akarah.sql4j.value.tuple;
 
 import java.util.List;
-import java.util.stream.Gatherer;
 
 public interface Tuple {
     List<Object> values();

@@ -1,10 +1,7 @@
 package net.akarah.sql4j;
 
 import net.akarah.sql4j.instruction.Instruction;
-import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.Expression;
-import net.akarah.sql4j.value.QueryResult;
 
 import java.io.FileInputStream;
 import java.io.IOException;

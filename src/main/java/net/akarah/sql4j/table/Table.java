@@ -2,8 +2,9 @@ package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.SqlConvertible;
-import net.akarah.sql4j.value.Expression;
-import net.akarah.sql4j.value.IntoExpression;
+import net.akarah.sql4j.value.expr.Expression;
+import net.akarah.sql4j.value.expr.Expressions;
+import net.akarah.sql4j.value.expr.IntoExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,6 @@ public class Table implements IntoExpression<Table> {
 
     @Override
     public Expression<Table> intoExpression() {
-        return Expression.of(this);
+        return Expressions.of(this);
     }
 }

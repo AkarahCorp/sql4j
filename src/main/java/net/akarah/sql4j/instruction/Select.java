@@ -3,11 +3,9 @@ package net.akarah.sql4j.instruction;
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.Expression;
-import net.akarah.sql4j.value.IntoExpression;
+import net.akarah.sql4j.value.expr.Expression;
+import net.akarah.sql4j.value.expr.IntoExpression;
 import net.akarah.sql4j.value.QueryResult;
-
-import java.sql.SQLException;
 
 public final class Select<T> implements Instruction<T> {
     Expression<T> baseExpression;

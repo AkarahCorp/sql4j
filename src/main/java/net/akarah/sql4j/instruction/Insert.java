@@ -3,7 +3,7 @@ package net.akarah.sql4j.instruction;
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.Expression;
+import net.akarah.sql4j.value.expr.Expression;
 import net.akarah.sql4j.value.QueryResult;
 
 import java.util.ArrayList;

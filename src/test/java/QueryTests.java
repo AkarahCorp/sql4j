@@ -1,6 +1,6 @@
 import net.akarah.sql4j.instruction.Insert;
 import net.akarah.sql4j.instruction.Select;
-import net.akarah.sql4j.value.Expression;
+import net.akarah.sql4j.value.expr.Expressions;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -9,8 +9,8 @@ public class QueryTests {
     @Order(-1)
     public void testInsertion() {
         try(var result = Insert.into(TestHelpers.PLAYERS_TABLE)
-                .withValue(TestHelpers.PLAYER_NAME, Expression.of("Endistic"))
-                .withValue(TestHelpers.PLAYER_AGE, Expression.of(17))
+                .withValue(TestHelpers.PLAYER_NAME, Expressions.of("Endistic"))
+                .withValue(TestHelpers.PLAYER_AGE, Expressions.of(17))
                 .evaluate(TestHelpers.DATABASE)) {
         }
     }
@@ -32,7 +32,7 @@ public class QueryTests {
     @Test
     public void testAddition() {
         try(var result =
-                Select.on(Expression.of(1).add(Expression.of(1)))
+                Select.on(Expressions.of(1).add(Expressions.of(1)))
                     .evaluate(TestHelpers.DATABASE)) {
 
             var row = result.next();
