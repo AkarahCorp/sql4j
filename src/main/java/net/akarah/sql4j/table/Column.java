@@ -1,9 +1,11 @@
 package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.SqlConvertible;
+import net.akarah.sql4j.value.Expression;
+import net.akarah.sql4j.value.IntoExpression;
 import net.akarah.sql4j.value.Type;
 
-public class Column<T> implements SqlConvertible {
+public class Column<T> implements SqlConvertible, IntoExpression<Column<T>> {
     Table table;
     String name;
     Type<T> type;
@@ -35,5 +37,10 @@ public class Column<T> implements SqlConvertible {
 
     public Table table() {
         return this.table;
+    }
+
+    @Override
+    public Expression<Column<T>> intoExpression() {
+        return Expression.of(this);
     }
 }

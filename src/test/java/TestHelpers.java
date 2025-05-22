@@ -1,4 +1,5 @@
 import net.akarah.sql4j.Database;
+import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.Expression;
@@ -21,13 +22,19 @@ public class TestHelpers {
             .dropIfExists()
             .createIfNotExists();
 
-    public static Connection localDbConnection() {
-        return DATABASE.connection();
+    @Test
+    public void testSelection() {
+        DATABASE.execute(
+                Select.on(Expression.of(PLAYER_NAME, PLAYER_AGE))
+                        .from(PLAYERS_TABLE)
+        );
     }
 
     @Test
     public void testAddition() throws SQLException {
-        var result = DATABASE.evaluate(Expression.of(1).add(Expression.of(1)));
+        var result = DATABASE.evaluate(
+                Select.on(Expression.of(1).add(Expression.of(1)))
+        );
         result.next();
         assert result.getInt("?column?") == 2;
     }

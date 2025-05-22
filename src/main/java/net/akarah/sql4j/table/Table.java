@@ -2,11 +2,12 @@ package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.value.Expression;
+import net.akarah.sql4j.value.IntoExpression;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table {
+public class Table implements IntoExpression<Table> {
     Database database;
     String name;
     List<Column<?>> columns = new ArrayList<>();
@@ -50,5 +51,10 @@ public class Table {
         sb.append(");");
         this.database.executeStatement(sb.toString());
         return this;
+    }
+
+    @Override
+    public Expression<Table> intoExpression() {
+        return Expression.of(this);
     }
 }

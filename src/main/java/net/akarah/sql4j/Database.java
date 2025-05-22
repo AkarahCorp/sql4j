@@ -1,5 +1,7 @@
 package net.akarah.sql4j;
 
+import net.akarah.sql4j.instruction.Instruction;
+import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.Expression;
 
@@ -93,14 +95,29 @@ public class Database {
         }
     }
 
-    public <T> ResultSet evaluate(Expression<T> expr) {
+    // TODO: make the ResultSet api type-safe
+    public ResultSet evaluate(Instruction<?> expr) {
+        var fmtStmt = expr.toSql().replace("\n", "").replace(",)", ")");
         try {
-            var rawStmt = "SELECT " + expr.toSql() + ";";
-            var fmtStmt = rawStmt.replace("\n", "").replace(",)", ")");
             var stmt = this.connection().prepareStatement(fmtStmt);
-            return stmt.executeQuery();
+            var r = stmt.executeQuery();
+            System.out.println(fmtStmt);
+            return r;
         } catch (SQLException e) {
-            System.out.println("failed: " + "SELECT " + expr.toSql() + ";");
+            System.out.println("failed: " + fmtStmt);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void execute(Instruction<?> instruction) {
+        var fmtStmt = instruction.toSql().replace("\n", "").replace(",)", ")");
+
+        try {
+            var stmt = this.connection().prepareStatement(fmtStmt);
+            stmt.execute();
+            System.out.println(fmtStmt);
+        } catch (SQLException e) {
+            System.out.println("failed: " + fmtStmt);
             throw new RuntimeException(e);
         }
     }

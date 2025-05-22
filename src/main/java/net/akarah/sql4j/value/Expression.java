@@ -1,45 +1,56 @@
 package net.akarah.sql4j.value;
 
 import net.akarah.sql4j.SqlConvertible;
+import net.akarah.sql4j.table.Column;
+import net.akarah.sql4j.table.Table;
 
-public sealed interface Expression<T> extends SqlConvertible {
+import java.util.List;
+
+public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
+    default Expression<T> intoExpression() {
+        return this;
+    }
+
     static Expression<Integer> of(int value) {
-        return new Int(value);
+        return () -> Integer.toString(value);
     }
 
     static Expression<String> of(String value) {
-        return new Text(value);
+        return () -> '"' + value + '"';
+    }
+
+    static <T1, T2> Expression<Tuple.Of2<T1, T2>> of(IntoExpression<T1> a, IntoExpression<T2> b) {
+        return new TupleExpr<>(List.of(a.intoExpression(), b.intoExpression()));
+    }
+
+    static <T1, T2, T3> Expression<Tuple.Of3<T1, T2, T3>> of(IntoExpression<T1> a, IntoExpression<T2> b, IntoExpression<T3> c) {
+        return new TupleExpr<>(List.of(a.intoExpression(), b.intoExpression(), c.intoExpression()));
+    }
+
+    static <T> Expression<Column<T>> of(Column<T> column) {
+        return column::tabledName;
+    }
+
+    static <T> Expression<Table> of(Table table) {
+        return table::name;
     }
 
     default Expression<T> add(Expression<T> other) {
-        return new Add<>(this, other);
+        var value = this;
+        return () -> value.toSql() + " + " + other.toSql();
     }
 
-    record All() implements Expression<Object> {
+    record TupleExpr<T extends Tuple>(List<Expression<?>> expressions) implements Expression<T> {
         @Override
         public String toSql() {
-            return "*";
-        }
-    }
-
-    record Int(int value) implements Expression<Integer> {
-        @Override
-        public String toSql() {
-            return Integer.toString(this.value);
-        }
-    }
-
-    record Text(String value) implements Expression<String> {
-        @Override
-        public String toSql() {
-            return "'" + value + "'";
-        }
-    }
-
-    record Add<T>(Expression<T> left, Expression<T> right) implements Expression<T> {
-        @Override
-        public String toSql() {
-            return left.toSql() + " + " + right.toSql();
+            var sb = new StringBuilder();
+            sb.append("(");
+            for(var expr : expressions) {
+                sb.append(expr.toSql());
+                sb.append(",");
+            }
+            sb.append(")");
+            return sb.toString();
         }
     }
 }
