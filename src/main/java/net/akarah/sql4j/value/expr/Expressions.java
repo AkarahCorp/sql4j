@@ -12,11 +12,11 @@ public final class Expressions {
     private Expressions() {}
 
     public static Expression<Integer> of(int value) {
-        return position -> Integer.toString(value);
+        return () -> Integer.toString(value);
     }
 
     public static Expression<String> of(String value) {
-        return position -> "'" + value + "'";
+        return () -> "'" + value + "'";
     }
 
     public static <T1, T2> Expression<Tuple.Of2<T1, T2>> of(IntoExpression<T1> a, IntoExpression<T2> b) {
@@ -30,7 +30,7 @@ public final class Expressions {
     public static <T> Expression<T> of(Column<T> column) {
         return new Expression<>() {
             @Override
-            public String toSql(Position position) {
+            public String toSql() {
                 return column.tabledName();
             }
 
@@ -42,6 +42,6 @@ public final class Expressions {
     }
 
     public static Expression<Table> of(Table table) {
-        return position -> table.name();
+        return table::name;
     }
 }

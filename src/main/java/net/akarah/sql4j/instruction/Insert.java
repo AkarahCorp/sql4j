@@ -1,10 +1,12 @@
 package net.akarah.sql4j.instruction;
 
 import net.akarah.sql4j.Database;
+import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.expr.Expression;
 import net.akarah.sql4j.value.QueryResult;
+import net.akarah.sql4j.value.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,27 +35,12 @@ public final class Insert implements Instruction<Void> {
     }
 
     @Override
-    public String toSql(Position position) {
-        var sb = new StringBuilder();
-        sb.append("INSERT INTO ");
-        sb.append(this.table.name());
-
-        sb.append("(");
-        for(var expr : this.columns) {
-            sb.append(expr.name());
-            if(this.columns.getLast() != expr) {
-                sb.append(",");
-            }
-        }
-
-        sb.append(") VALUES (");
-        for(var expr : this.values) {
-            sb.append(expr.toSql(Position.VALUE));
-            if(this.values.getLast() != expr) {
-                sb.append(",");
-            }
-        }
-        sb.append(");");
-        return sb.toString();
+    public String toSql() {
+        return "INSERT INTO " +
+                this.table.name() +
+                StringUtils.parenthesizedValues(this.columns, Column::name) +
+                " VALUES " +
+                StringUtils.parenthesizedValues(this.values, SqlConvertible::toSql) +
+                ";";
     }
 }

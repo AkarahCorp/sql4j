@@ -95,7 +95,7 @@ public class Database {
 
     // TODO: make the ResultSet api type-safe
     public ResultSet evaluate(Instruction<?> expr) {
-        var fmtStmt = expr.toSql(SqlConvertible.Position.VALUE).replace("\n", "").replace(",)", ")");
+        var fmtStmt = expr.toSql().replace("\n", "").replace(",)", ")");
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);
             var r = stmt.executeQuery();
@@ -108,7 +108,7 @@ public class Database {
     }
 
     public void execute(Instruction<?> instruction) {
-        var fmtStmt = instruction.toSql(SqlConvertible.Position.VALUE).replace("\n", "").replace(",)", ")");
+        var fmtStmt = instruction.toSql().replace("\n", "").replace(",)", ")");
 
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);

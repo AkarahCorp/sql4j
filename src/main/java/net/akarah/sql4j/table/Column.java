@@ -22,11 +22,10 @@ public class Column<T> implements SqlConvertible, IntoExpression<T> {
         return this.table.name() + "." + this.name();
     }
 
-    public String toSql(Position position) {
+    public String toSql() {
         return name
                 + " " + type.toSql()
-                + (type.isNullable() ? "" : " NOT NULL")
-                + ",";
+                + (type.isNullable() ? "" : " NOT NULL");
     }
 
     public static <T> Column<T> of(String name, Type<T> type) {

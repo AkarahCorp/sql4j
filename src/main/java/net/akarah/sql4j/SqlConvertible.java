@@ -1,7 +1,7 @@
 package net.akarah.sql4j;
 
 public interface SqlConvertible {
-    String toSql(Position position);
+    String toSql();
 
     enum Position {
         SELECTOR,

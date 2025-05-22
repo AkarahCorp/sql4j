@@ -5,6 +5,7 @@ import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.expr.Expression;
 import net.akarah.sql4j.value.expr.Expressions;
 import net.akarah.sql4j.value.expr.IntoExpression;
+import net.akarah.sql4j.value.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,15 +44,11 @@ public class Table implements IntoExpression<Table> {
     }
 
     public Table createIfNotExists() {
-        var sb = new StringBuilder();
-        sb.append("CREATE TABLE IF NOT EXISTS ");
-        sb.append(this.name);
-        sb.append(" (");
-        for(var column : this.columns) {
-            sb.append(column.toSql(SqlConvertible.Position.VALUE));
-        }
-        sb.append(");");
-        this.database.executeStatement(sb.toString());
+        String sb = "CREATE TABLE IF NOT EXISTS " +
+                this.name +
+                StringUtils.parenthesizedValues(this.columns, Column::toSql) +
+                ";";
+        this.database.executeStatement(sb);
         return this;
     }
 

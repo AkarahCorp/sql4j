@@ -17,6 +17,6 @@ public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
 
     default Expression<T> add(Expression<T> other) {
         var value = this;
-        return position -> value.toSql(position) + " + " + other.toSql(position);
+        return () -> value.toSql() + " + " + other.toSql();
     }
 }
