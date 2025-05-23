@@ -2,45 +2,42 @@ package net.akarah.sql4j.value.expr;
 
 import net.akarah.sql4j.SqlConvertible;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-public interface Expression<T> extends SqlConvertible, IntoExpression<T> {
-    default Expression<T> intoExpression() {
+public interface Value<T> extends SqlConvertible, IntoValue<T> {
+    default Value<T> intoValue() {
         return this;
     }
 
     default String column() { return "?column?"; }
 
-    default Expression<T> add(Expression<T> other) {
+    default Value<T> add(Value<T> other) {
         return () -> this.toSql() + " + " + other.toSql();
     }
 
-    default Expression<T> sub(Expression<T> other) {
+    default Value<T> sub(Value<T> other) {
         return () -> this.toSql() + " - " + other.toSql();
     }
 
-    default Expression<Boolean> equals(Expression<T> other) {
+    default Value<Boolean> equals(Value<T> other) {
         return () -> this.toSql() + " = " + other.toSql();
     }
 
-    default Expression<Boolean> notEquals(Expression<T> other) {
+    default Value<Boolean> notEquals(Value<T> other) {
         return () -> this.toSql() + " <> " + other.toSql();
     }
 
-    default Expression<Boolean> greaterThan(Expression<T> other) {
+    default Value<Boolean> greaterThan(Value<T> other) {
         return () -> this.toSql() + " > " + other.toSql();
     }
 
-    default Expression<Boolean> lessThan(Expression<T> other) {
+    default Value<Boolean> lessThan(Value<T> other) {
         return () -> this.toSql() + " < " + other.toSql();
     }
 
-    default Expression<Boolean> greaterThanOrEquals(Expression<T> other) {
+    default Value<Boolean> greaterThanOrEquals(Value<T> other) {
         return () -> this.toSql() + " >= " + other.toSql();
     }
 
-    default Expression<Boolean> lessThanOrEquals(Expression<T> other) {
+    default Value<Boolean> lessThanOrEquals(Value<T> other) {
         return () -> this.toSql() + " <= " + other.toSql();
     }
 }

@@ -3,8 +3,8 @@ package net.akarah.sql4j.instruction;
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.expr.Expression;
-import net.akarah.sql4j.value.expr.IntoExpression;
+import net.akarah.sql4j.value.expr.Value;
+import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.QueryResult;
 import net.akarah.sql4j.value.tuple.Tuple;
 import net.akarah.sql4j.value.util.StringUtils;
@@ -13,61 +13,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Select<T> implements Instruction<T> {
-    List<Expression<?>> baseExpressions;
-    Expression<Table> table;
-    List<Expression<Boolean>> conditions = new ArrayList<>();
-    Expression<?> orderBy;
+    List<Value<?>> baseValues;
+    Value<Table> table;
+    List<Value<Boolean>> conditions = new ArrayList<>();
+    Value<?> orderBy;
     String ordering; // either ASC or DESC
-    Expression<Integer> limit;
-    Expression<Integer> offset;
+    Value<Integer> limit;
+    Value<Integer> offset;
 
-    public static <T> Select<T> on(IntoExpression<T> baseExpression) {
+    public static <T> Select<T> on(IntoValue<T> baseExpression) {
         var sel = new Select<T>();
-        sel.baseExpressions = List.of(baseExpression.intoExpression());
+        sel.baseValues = List.of(baseExpression.intoValue());
         return sel;
     }
 
     public static <T1, T2> Select<Tuple.Of2<T1, T2>> on(
-            IntoExpression<T1> baseExpression1,
-            IntoExpression<T2> baseExpression2
+            IntoValue<T1> baseExpression1,
+            IntoValue<T2> baseExpression2
     ) {
         var sel = new Select<Tuple.Of2<T1, T2>>();
-        sel.baseExpressions = List.of(
-                baseExpression1.intoExpression(),
-                baseExpression2.intoExpression()
+        sel.baseValues = List.of(
+                baseExpression1.intoValue(),
+                baseExpression2.intoValue()
         );
         return sel;
     }
 
-    public Select<T> from(IntoExpression<Table> table) {
-        this.table = table.intoExpression();
+    public Select<T> from(IntoValue<Table> table) {
+        this.table = table.intoValue();
         return this;
     }
 
-    public Select<T> where(IntoExpression<Boolean> condition) {
-        this.conditions.add(condition.intoExpression());
+    public Select<T> where(IntoValue<Boolean> condition) {
+        this.conditions.add(condition.intoValue());
         return this;
     }
 
-    public Select<T> orderByAscending(IntoExpression<?> expression) {
-        this.orderBy = expression.intoExpression();
+    public Select<T> orderByAscending(IntoValue<?> expression) {
+        this.orderBy = expression.intoValue();
         this.ordering = "ASC";
         return this;
     }
 
-    public Select<T> orderByDescending(IntoExpression<?> expression) {
-        this.orderBy = expression.intoExpression();
+    public Select<T> orderByDescending(IntoValue<?> expression) {
+        this.orderBy = expression.intoValue();
         this.ordering = "DESC";
         return this;
     }
 
-    public Select<T> limit(IntoExpression<Integer> expression) {
-        this.limit = expression.intoExpression();
+    public Select<T> limit(IntoValue<Integer> expression) {
+        this.limit = expression.intoValue();
         return this;
     }
 
-    public Select<T> offset(IntoExpression<Integer> expression) {
-        this.offset = expression.intoExpression();
+    public Select<T> offset(IntoValue<Integer> expression) {
+        this.offset = expression.intoValue();
         return this;
     }
 
@@ -75,7 +75,7 @@ public final class Select<T> implements Instruction<T> {
     public String toSql() {
         var sb = new StringBuilder();
         sb.append("SELECT ");
-        sb.append(StringUtils.groupedValues(baseExpressions, Expression::toSql));
+        sb.append(StringUtils.groupedValues(baseValues, Value::toSql));
         if(this.table != null) {
             sb.append(" FROM ");
             sb.append(this.table.toSql());
@@ -105,12 +105,12 @@ public final class Select<T> implements Instruction<T> {
     @Override
     public QueryResult<T> evaluate(Database database) {
         var resultSet = database.evaluate(this);
-        var queryResult = QueryResult.<T>of(resultSet, (int) this.baseExpressions.size());
+        var queryResult = QueryResult.<T>of(resultSet, (int) this.baseValues.size());
 
         queryResult.withFunction(
                 resultSet2 -> {
-                    var objectList = this.baseExpressions.stream()
-                            .map(Expression::column)
+                    var objectList = this.baseValues.stream()
+                            .map(Value::column)
                             .map(name -> ExceptionUtils.sneakyThrows(() -> resultSet2.getObject(name)))
                             .toList();
                     return getValueFromList(objectList);

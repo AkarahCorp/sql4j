@@ -1,6 +1,6 @@
 import net.akarah.sql4j.instruction.Insert;
 import net.akarah.sql4j.instruction.Select;
-import net.akarah.sql4j.value.expr.Expressions;
+import net.akarah.sql4j.value.expr.Values;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
@@ -8,20 +8,20 @@ public class QueryTests {
     @Test
     public void _testInsertion() {
         Insert.into(TestHelpers.PLAYERS_TABLE)
-                .withValue(TestHelpers.PLAYER_NAME, Expressions.of("Endistic"))
-                .withValue(TestHelpers.PLAYER_AGE, Expressions.of(17))
+                .withValue(TestHelpers.PLAYER_NAME, Values.of("Endistic"))
+                .withValue(TestHelpers.PLAYER_AGE, Values.of(17))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
-                .withValue(TestHelpers.PLAYER_NAME, Expressions.of("TheYoung"))
-                .withValue(TestHelpers.PLAYER_AGE, Expressions.of(15))
+                .withValue(TestHelpers.PLAYER_NAME, Values.of("TheYoung"))
+                .withValue(TestHelpers.PLAYER_AGE, Values.of(15))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
-                .withValue(TestHelpers.PLAYER_NAME, Expressions.of("TheAdult"))
-                .withValue(TestHelpers.PLAYER_AGE, Expressions.of(19))
+                .withValue(TestHelpers.PLAYER_NAME, Values.of("TheAdult"))
+                .withValue(TestHelpers.PLAYER_AGE, Values.of(19))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
     }
@@ -44,7 +44,7 @@ public class QueryTests {
         try(var result =
                     Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)
                             .from(TestHelpers.PLAYERS_TABLE)
-                            .where(Expressions.of(TestHelpers.PLAYER_AGE).greaterThan(Expressions.of(18)))
+                            .where(Values.of(TestHelpers.PLAYER_AGE).greaterThan(Values.of(18)))
                             .evaluate(TestHelpers.DATABASE)) {
 
             assert result.next().isPresent();
@@ -73,7 +73,7 @@ public class QueryTests {
                     Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)
                             .from(TestHelpers.PLAYERS_TABLE)
                             .orderByDescending(TestHelpers.PLAYER_AGE)
-                            .limit(Expressions.of(1))
+                            .limit(Values.of(1))
                             .evaluate(TestHelpers.DATABASE)) {
 
             var first = result.next();
@@ -87,7 +87,7 @@ public class QueryTests {
     @Test
     public void testAddition() {
         try(var result =
-                Select.on(Expressions.of(1).add(Expressions.of(1)))
+                Select.on(Values.of(1).add(Values.of(1)))
                     .evaluate(TestHelpers.DATABASE)) {
 
             var row = result.next();

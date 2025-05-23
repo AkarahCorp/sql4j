@@ -1,16 +1,15 @@
 package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
-import net.akarah.sql4j.SqlConvertible;
-import net.akarah.sql4j.value.expr.Expression;
-import net.akarah.sql4j.value.expr.Expressions;
-import net.akarah.sql4j.value.expr.IntoExpression;
+import net.akarah.sql4j.value.expr.Value;
+import net.akarah.sql4j.value.expr.Values;
+import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table implements IntoExpression<Table> {
+public class Table implements IntoValue<Table> {
     Database database;
     String name;
     List<Column<?>> columns = new ArrayList<>();
@@ -53,7 +52,7 @@ public class Table implements IntoExpression<Table> {
     }
 
     @Override
-    public Expression<Table> intoExpression() {
-        return Expressions.of(this);
+    public Value<Table> intoValue() {
+        return Values.of(this);
     }
 }

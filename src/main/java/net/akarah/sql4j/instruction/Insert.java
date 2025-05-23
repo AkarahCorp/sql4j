@@ -4,7 +4,7 @@ import net.akarah.sql4j.Database;
 import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
-import net.akarah.sql4j.value.expr.Expression;
+import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.QueryResult;
 import net.akarah.sql4j.value.util.StringUtils;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public final class Insert implements Instruction<Void> {
     Table table;
     List<Column<?>> columns = new ArrayList<>();
-    List<Expression<?>> values = new ArrayList<>();
+    List<Value<?>> values = new ArrayList<>();
 
     public static Insert into(Table table) {
         var insert = new Insert();
@@ -22,7 +22,7 @@ public final class Insert implements Instruction<Void> {
         return insert;
     }
 
-    public <T> Insert withValue(Column<T> column, Expression<T> value) {
+    public <T> Insert withValue(Column<T> column, Value<T> value) {
         this.columns.add(column);
         this.values.add(value);
         return this;
