@@ -12,14 +12,14 @@ import net.akarah.sql4j.value.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Select<T> implements Instruction<T> {
+public final class Select<T> implements Instruction<T>, Value<T> {
     List<Value<?>> baseValues;
     Value<Table> table;
     List<Value<Boolean>> conditions = new ArrayList<>();
     Value<?> orderBy;
     String ordering; // either ASC or DESC
-    Value<Integer> limit;
-    Value<Integer> offset;
+    Value<Long> limit;
+    Value<Long> offset;
 
     public static <T> Select<T> on(IntoValue<T> baseExpression) {
         var sel = new Select<T>();
@@ -61,12 +61,12 @@ public final class Select<T> implements Instruction<T> {
         return this;
     }
 
-    public Select<T> limit(IntoValue<Integer> expression) {
+    public Select<T> limit(IntoValue<Long> expression) {
         this.limit = expression.intoValue();
         return this;
     }
 
-    public Select<T> offset(IntoValue<Integer> expression) {
+    public Select<T> offset(IntoValue<Long> expression) {
         this.offset = expression.intoValue();
         return this;
     }
@@ -105,7 +105,7 @@ public final class Select<T> implements Instruction<T> {
     @Override
     public QueryResult<T> evaluate(Database database) {
         var resultSet = database.evaluate(this);
-        var queryResult = QueryResult.<T>of(resultSet, (int) this.baseValues.size());
+        var queryResult = QueryResult.<T>of(resultSet, this.baseValues.size());
 
         queryResult.withFunction(
                 resultSet2 -> {

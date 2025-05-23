@@ -1,10 +1,15 @@
 import net.akarah.sql4j.instruction.Insert;
 import net.akarah.sql4j.instruction.Select;
+import net.akarah.sql4j.value.expr.Functions;
 import net.akarah.sql4j.value.expr.Values;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class QueryTests {
+    static {
+        System.out.println("loaded Query Tests.");
+    }
+
     @Test
     public void _testInsertion() {
         Insert.into(TestHelpers.PLAYERS_TABLE)
@@ -73,12 +78,27 @@ public class QueryTests {
                     Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)
                             .from(TestHelpers.PLAYERS_TABLE)
                             .orderByDescending(TestHelpers.PLAYER_AGE)
-                            .limit(Values.of(1))
+                            .limit(Values.of(1L))
                             .evaluate(TestHelpers.DATABASE)) {
 
             var first = result.next();
             assert first.isPresent();
             assert first.get().a().equals("TheAdult");
+
+            assert result.next().isEmpty();
+        }
+    }
+
+    @Test
+    public void selectionSum() {
+        try(var result =
+                    Select.on(Functions.sum(TestHelpers.PLAYER_AGE))
+                            .from(TestHelpers.PLAYERS_TABLE)
+                            .evaluate(TestHelpers.DATABASE)) {
+
+            var first = result.next();
+            assert first.isPresent();
+            assert first.get() == 17 + 15 + 19;
 
             assert result.next().isEmpty();
         }

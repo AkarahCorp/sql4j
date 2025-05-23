@@ -45,7 +45,7 @@ public class Table implements IntoValue<Table> {
     public Table createIfNotExists() {
         String sb = "CREATE TABLE IF NOT EXISTS " +
                 this.name +
-                StringUtils.parenthesizedValues(this.columns, Column::toSql) +
+                StringUtils.parenthesizedValues(this.columns, Column::toDefinition) +
                 ";";
         this.database.executeStatement(sb);
         return this;

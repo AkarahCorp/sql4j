@@ -6,7 +6,7 @@ import net.akarah.sql4j.value.expr.Values;
 import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.Type;
 
-public class Column<T> implements SqlConvertible, IntoValue<T> {
+public class Column<T> implements SqlConvertible, IntoValue<T>, Value<T> {
     Table table;
     String name;
     Type<T> type;
@@ -22,10 +22,14 @@ public class Column<T> implements SqlConvertible, IntoValue<T> {
         return this.table.name() + "." + this.name();
     }
 
-    public String toSql() {
+    public String toDefinition() {
         return name
                 + " " + type.toSql()
                 + (type.isNullable() ? "" : " NOT NULL");
+    }
+
+    public String toSql() {
+        return Values.of(this).toSql();
     }
 
     public static <T> Column<T> of(String name, Type<T> type) {
