@@ -9,7 +9,7 @@ import net.akarah.sql4j.value.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table implements IntoValue<Table> {
+public class Table implements IntoValue<Table>, Value<Table> {
     Database database;
     String name;
     List<Column<?>> columns = new ArrayList<>();
@@ -54,5 +54,10 @@ public class Table implements IntoValue<Table> {
     @Override
     public Value<Table> intoValue() {
         return Values.of(this);
+    }
+
+    @Override
+    public String toSql() {
+        return this.name();
     }
 }

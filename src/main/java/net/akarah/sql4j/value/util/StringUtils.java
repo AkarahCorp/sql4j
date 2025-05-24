@@ -27,4 +27,18 @@ public class StringUtils {
 
         return sb.toString();
     }
+
+    public static <T> String groupedValues(List<T> expressions, Function<T, String> stringFunction, String seperator) {
+        var sb = new StringBuilder();
+
+        for(int i = 0; i < expressions.size(); i++) {
+            var expr = expressions.get(i);
+            sb.append(stringFunction.apply(expr));
+            if(i != expressions.size() - 1) {
+                sb.append(seperator);
+            }
+        }
+
+        return sb.toString();
+    }
 }

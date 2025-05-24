@@ -80,9 +80,15 @@ public final class Select<T> implements Instruction<T>, Value<T> {
             sb.append(" FROM ");
             sb.append(this.table.toSql());
         }
-        for(var condition : this.conditions) {
+        if(!this.conditions.isEmpty()) {
             sb.append(" WHERE ");
-            sb.append(condition.toSql());
+            sb.append(
+                    StringUtils.groupedValues(
+                            this.conditions,
+                            x -> "(" + x.toSql() + ")",
+                            " AND "
+                    )
+            );
         }
         if(this.orderBy != null) {
             sb.append(" ORDER BY ");
