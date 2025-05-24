@@ -2,14 +2,12 @@ package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.value.expr.Value;
-import net.akarah.sql4j.value.expr.Values;
-import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table implements IntoValue<Table>, Value<Table> {
+public class Table implements Value<Table> {
     Database database;
     String name;
     List<Column<?>> columns = new ArrayList<>();
@@ -49,11 +47,6 @@ public class Table implements IntoValue<Table>, Value<Table> {
                 ";";
         this.database.executeStatement(sb);
         return this;
-    }
-
-    @Override
-    public Value<Table> intoValue() {
-        return Values.of(this);
     }
 
     @Override

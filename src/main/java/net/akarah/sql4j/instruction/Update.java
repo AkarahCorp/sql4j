@@ -1,11 +1,9 @@
 package net.akarah.sql4j.instruction;
 
 import net.akarah.sql4j.Database;
-import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.QueryResult;
-import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.tuple.Tuple;
 import net.akarah.sql4j.value.util.StringUtils;
@@ -13,7 +11,7 @@ import net.akarah.sql4j.value.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Update<T> implements Instruction<T>, Value<T> {
+public final class Update<T> implements Instruction<T> {
     Table table;
     List<Tuple.Of2<Column<?>, Value<?>>> columnsToSet = new ArrayList<>();
     List<Value<Boolean>> where = new ArrayList<>();
@@ -24,8 +22,8 @@ public final class Update<T> implements Instruction<T>, Value<T> {
         return sel;
     }
 
-    public <U> Update<T> setColumn(Column<U> column, IntoValue<U> value) {
-        this.columnsToSet.add(new Tuple.Of2<>(column, value.intoValue()));
+    public <U> Update<T> setColumn(Column<U> column, Value<U> value) {
+        this.columnsToSet.add(new Tuple.Of2<>(column, value));
         return this;
     }
 

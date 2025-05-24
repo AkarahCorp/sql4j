@@ -2,11 +2,7 @@ package net.akarah.sql4j.value.expr;
 
 import net.akarah.sql4j.SqlConvertible;
 
-public interface Value<T> extends SqlConvertible, IntoValue<T> {
-    default Value<T> intoValue() {
-        return this;
-    }
-
+public interface Value<T> extends SqlConvertible {
     default String column() { return "?column?"; }
 
     default Value<T> add(Value<T> other) {

@@ -1,7 +1,5 @@
 package net.akarah.sql4j;
 
-import java.util.function.Supplier;
-
 public class ExceptionUtils {
     public interface Throws<T, E extends Throwable> {
         T apply() throws E;

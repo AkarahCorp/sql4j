@@ -4,7 +4,6 @@ import net.akarah.sql4j.Database;
 import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Table;
 import net.akarah.sql4j.value.expr.Value;
-import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.QueryResult;
 import net.akarah.sql4j.value.tuple.Tuple;
 import net.akarah.sql4j.value.util.StringUtils;
@@ -21,53 +20,53 @@ public final class Select<T> implements Instruction<T>, Value<T> {
     Value<Long> limit;
     Value<Long> offset;
 
-    public static <T> Select<T> on(IntoValue<T> baseExpression) {
+    public static <T> Select<T> on(Value<T> baseExpression) {
         var sel = new Select<T>();
-        sel.baseValues = List.of(baseExpression.intoValue());
+        sel.baseValues = List.of(baseExpression);
         return sel;
     }
 
     public static <T1, T2> Select<Tuple.Of2<T1, T2>> on(
-            IntoValue<T1> baseExpression1,
-            IntoValue<T2> baseExpression2
+            Value<T1> baseExpression1,
+            Value<T2> baseExpression2
     ) {
         var sel = new Select<Tuple.Of2<T1, T2>>();
         sel.baseValues = List.of(
-                baseExpression1.intoValue(),
-                baseExpression2.intoValue()
+                baseExpression1,
+                baseExpression2
         );
         return sel;
     }
 
-    public Select<T> from(IntoValue<Table> table) {
-        this.table = table.intoValue();
+    public Select<T> from(Value<Table> table) {
+        this.table = table;
         return this;
     }
 
-    public Select<T> where(IntoValue<Boolean> condition) {
-        this.conditions.add(condition.intoValue());
+    public Select<T> where(Value<Boolean> condition) {
+        this.conditions.add(condition);
         return this;
     }
 
-    public Select<T> orderByAscending(IntoValue<?> expression) {
-        this.orderBy = expression.intoValue();
+    public Select<T> orderByAscending(Value<?> expression) {
+        this.orderBy = expression;
         this.ordering = "ASC";
         return this;
     }
 
-    public Select<T> orderByDescending(IntoValue<?> expression) {
-        this.orderBy = expression.intoValue();
+    public Select<T> orderByDescending(Value<?> expression) {
+        this.orderBy = expression;
         this.ordering = "DESC";
         return this;
     }
 
-    public Select<T> limit(IntoValue<Long> expression) {
-        this.limit = expression.intoValue();
+    public Select<T> limit(Value<Long> expression) {
+        this.limit = expression;
         return this;
     }
 
-    public Select<T> offset(IntoValue<Long> expression) {
-        this.offset = expression.intoValue();
+    public Select<T> offset(Value<Long> expression) {
+        this.offset = expression;
         return this;
     }
 

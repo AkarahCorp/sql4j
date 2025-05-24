@@ -3,10 +3,9 @@ package net.akarah.sql4j.table;
 import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.expr.Values;
-import net.akarah.sql4j.value.expr.IntoValue;
 import net.akarah.sql4j.value.Type;
 
-public class Column<T> implements SqlConvertible, IntoValue<T>, Value<T> {
+public class Column<T> implements SqlConvertible, Value<T> {
     Table table;
     String name;
     Type<T> type;
@@ -29,7 +28,12 @@ public class Column<T> implements SqlConvertible, IntoValue<T>, Value<T> {
     }
 
     public String toSql() {
-        return Values.of(this).toSql();
+        return this.tabledName();
+    }
+
+    @Override
+    public String column() {
+        return this.name();
     }
 
     public static <T> Column<T> of(String name, Type<T> type) {
@@ -41,10 +45,5 @@ public class Column<T> implements SqlConvertible, IntoValue<T>, Value<T> {
 
     public Table table() {
         return this.table;
-    }
-
-    @Override
-    public Value<T> intoValue() {
-        return Values.of(this);
     }
 }

@@ -76,7 +76,7 @@ public class QueryTests {
         try(var result =
                     Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)
                             .from(TestHelpers.PLAYERS_TABLE)
-                            .where(Values.of(TestHelpers.PLAYER_AGE).greaterThan(Values.of(18)))
+                            .where(TestHelpers.PLAYER_AGE.greaterThan(Values.of(18)))
                             .where(TestHelpers.PLAYER_NAME.notEquals(Values.of("TheUpdated")))
                             .evaluate(TestHelpers.DATABASE)) {
 
