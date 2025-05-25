@@ -41,11 +41,20 @@ public class Table implements Value<Table> {
     }
 
     public Table createIfNotExists() {
-        String sb = "CREATE TABLE IF NOT EXISTS " +
-                this.name +
-                StringUtils.parenthesizedValues(this.columns, Column::toDefinition) +
-                ";";
-        this.database.executeStatement(sb);
+
+        var sb = new StringBuilder();
+        sb.append("CREATE TABLE IF NOT EXISTS ")
+                .append(this.name)
+                .append(StringUtils.parenthesizedValues(this.columns, Column::toDefinition))
+                .append(";");
+        for(var column : this.columns) {
+            sb.append("ALTER TABLE ")
+                    .append(this.name)
+                    .append(" ADD COLUMN IF NOT EXISTS ")
+                    .append(column.toDefinition())
+                    .append(";");
+        }
+        this.database.executeStatement(sb.toString());
         return this;
     }
 

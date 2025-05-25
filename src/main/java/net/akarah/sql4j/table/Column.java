@@ -9,6 +9,7 @@ public class Column<T> implements SqlConvertible, Value<T> {
     Table table;
     String name;
     Type<T> type;
+    Value<T> defaultValue;
 
     private Column() {
     }
@@ -24,11 +25,17 @@ public class Column<T> implements SqlConvertible, Value<T> {
     public String toDefinition() {
         return name
                 + " " + type.toSql()
-                + (type.isNullable() ? "" : " NOT NULL");
+                + (type.isNullable() ? "" : " NOT NULL")
+                + (defaultValue == null ? "" : " DEFAULT " + defaultValue.toSql());
     }
 
     public String toSql() {
         return this.tabledName();
+    }
+
+    public Column<T> defaultValue(Value<T> defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
     }
 
     @Override

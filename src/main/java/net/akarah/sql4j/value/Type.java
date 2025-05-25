@@ -1,5 +1,6 @@
 package net.akarah.sql4j.value;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public sealed interface Type<T> {
@@ -14,6 +15,18 @@ public sealed interface Type<T> {
         return new Int();
     }
 
+    static Type<Short> smallint() {
+        return new SmallInt();
+    }
+
+    static Type<Long> bigint() {
+        return new BigInt();
+    }
+
+    static Type<BigDecimal> numeric() {
+        return new Numeric();
+    }
+
     default Type<Optional<T>> nullable() {
         return new Nullable<>(this);
     }
@@ -25,24 +38,60 @@ public sealed interface Type<T> {
     record Text() implements Type<String> {
         @Override
         public String toSql() {
-            return "TEXT";
+            return "text";
         }
 
         @Override
         public String convert(Object object) {
-            return (String)  object;
+            return (String) object;
+        }
+    }
+
+    record SmallInt() implements Type<Short> {
+        @Override
+        public String toSql() {
+            return "smallint";
+        }
+
+        @Override
+        public Short convert(Object object) {
+            return (Short) object;
+        }
+    }
+
+    record BigInt() implements Type<Long> {
+        @Override
+        public String toSql() {
+            return "bigint";
+        }
+
+        @Override
+        public Long convert(Object object) {
+            return (Long) object;
         }
     }
 
     record Int() implements Type<Integer> {
         @Override
         public String toSql() {
-            return "INTEGER";
+            return "integer";
         }
 
         @Override
         public Integer convert(Object object) {
-            return (Integer)  object;
+            return (Integer) object;
+        }
+    }
+
+    record Numeric() implements Type<BigDecimal> {
+        @Override
+        public String toSql() {
+            return "numeric";
+        }
+
+        @Override
+        public BigDecimal convert(Object object) {
+            return (BigDecimal) object;
         }
     }
 
