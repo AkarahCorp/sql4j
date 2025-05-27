@@ -9,10 +9,12 @@ public class TestHelpers {
 
     public static Column<String> PLAYER_NAME = Column.of("name", Type.text());
     public static Column<Integer> PLAYER_AGE = Column.of("age", Type.integer());
+    public static Column<Integer> PLAYER_ID = Column.of("id", Type.serial());
 
     public static Table PLAYERS_TABLE = DATABASE.createTable("players")
             .withColumn(PLAYER_NAME)
             .withColumn(PLAYER_AGE)
+            .withColumn(PLAYER_ID)
             .dropIfExists()
             .createIfNotExists();
 

@@ -23,6 +23,18 @@ public sealed interface Type<T> {
         return new BigInt();
     }
 
+    static Type<Integer> serial() {
+        return new Serial();
+    }
+
+    static Type<Short> smallSerial() {
+        return new SmallSerial();
+    }
+
+    static Type<Long> bigSerial() {
+        return new BigSerial();
+    }
+
     static Type<BigDecimal> numeric() {
         return new Numeric();
     }
@@ -80,6 +92,42 @@ public sealed interface Type<T> {
         @Override
         public Integer convert(Object object) {
             return (Integer) object;
+        }
+    }
+
+    record SmallSerial() implements Type<Short> {
+        @Override
+        public String toSql() {
+            return "smallserial";
+        }
+
+        @Override
+        public Short convert(Object object) {
+            return (Short) object;
+        }
+    }
+
+    record Serial() implements Type<Integer> {
+        @Override
+        public String toSql() {
+            return "serial";
+        }
+
+        @Override
+        public Integer convert(Object object) {
+            return (Integer) object;
+        }
+    }
+
+    record BigSerial() implements Type<Long> {
+        @Override
+        public String toSql() {
+            return "bigserial";
+        }
+
+        @Override
+        public Long convert(Object object) {
+            return (Long) object;
         }
     }
 

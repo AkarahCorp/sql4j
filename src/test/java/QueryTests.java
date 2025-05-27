@@ -1,3 +1,4 @@
+import net.akarah.sql4j.instruction.Delete;
 import net.akarah.sql4j.instruction.Insert;
 import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.instruction.Update;
@@ -56,6 +57,25 @@ public class QueryTests {
             assert row.isPresent();
             assert row.get().equals("TheUpdated");
         }
+    }
+
+    @Test
+    public void _testUpdatingId() {
+        try(var result = Insert.into(TestHelpers.PLAYERS_TABLE)
+                .withValue(TestHelpers.PLAYER_NAME, Values.of("TheIdentifiable"))
+                .withValue(TestHelpers.PLAYER_AGE, Values.of(25))
+                .returning(TestHelpers.PLAYER_ID)
+                .evaluate(TestHelpers.DATABASE)) {
+
+            var row = result.next();
+            assert row.isPresent();
+            assert row.get() == 5;
+        }
+
+        Delete.from(TestHelpers.PLAYERS_TABLE)
+                .where(TestHelpers.PLAYER_NAME.equals(Values.of("TheIdentifiable")))
+                .evaluate(TestHelpers.DATABASE)
+                .close();
     }
 
     @Test

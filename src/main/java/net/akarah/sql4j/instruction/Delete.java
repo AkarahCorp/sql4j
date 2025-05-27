@@ -29,7 +29,7 @@ public final class Delete<T> implements Instruction<T> {
     @Override
     public String toSql() {
         var sb = new StringBuilder();
-        sb.append("DELETE ");
+        sb.append("DELETE FROM ");
         sb.append(this.table.name());
         if(!this.where.isEmpty()) {
             sb.append(" WHERE ");
