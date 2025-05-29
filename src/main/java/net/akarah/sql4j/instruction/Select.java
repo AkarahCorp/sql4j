@@ -3,6 +3,7 @@ package net.akarah.sql4j.instruction;
 import net.akarah.sql4j.Database;
 import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.table.Table;
+import net.akarah.sql4j.value.Conversions;
 import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.QueryResult;
 import net.akarah.sql4j.value.tuple.Tuple;
@@ -118,21 +119,10 @@ public final class Select<T> implements Instruction<T>, Value<T> {
                             .map(Value::column)
                             .map(name -> ExceptionUtils.sneakyThrows(() -> resultSet2.getObject(name)))
                             .toList();
-                    return getValueFromList(objectList);
+                    return Conversions.getValueFromList(objectList);
                 }
 
         );
         return queryResult;
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public static <T> T getValueFromList(List<Object> objects) {
-        return switch (objects.size()) {
-            case 1 -> (T) objects.getFirst();
-            case 2 -> (T) new Tuple.Of2<>(objects.getFirst(), objects.get(1));
-            case 3 -> (T) new Tuple.Of3<>(objects.getFirst(), objects.get(1), objects.get(2));
-            default -> throw new RuntimeException("not possible, too many columns :P");
-        };
     }
 }

@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation("org.postgresql:postgresql:42.7.5")
+    implementation("com.google.code.gson:gson:2.13.1")
 }
 
 tasks.test {

@@ -5,6 +5,7 @@ import net.akarah.sql4j.ExceptionUtils;
 import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.table.Column;
 import net.akarah.sql4j.table.Table;
+import net.akarah.sql4j.value.Conversions;
 import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.QueryResult;
 import net.akarah.sql4j.value.util.StringUtils;
@@ -52,7 +53,7 @@ public final class Insert<O> implements Instruction<O> {
                 var objectList = List.of(
                         ExceptionUtils.sneakyThrows(() -> resultSet2.getObject(this.returning.name()))
                 );
-                return Select.getValueFromList(objectList);
+                return Conversions.getValueFromList(objectList);
             });
             return (QueryResult<O>) qr;
         }
