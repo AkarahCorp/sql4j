@@ -1,5 +1,7 @@
 package net.akarah.sql4j.value;
 
+import com.google.gson.JsonElement;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -36,6 +38,14 @@ public interface Type<T> {
 
     static Type<BigDecimal> numeric() {
         return () -> "numeric";
+    }
+
+    static Type<JsonElement> json() {
+        return () -> "json";
+    }
+
+    static Type<JsonElement> jsonb() {
+        return () -> "jsonb";
     }
 
     default Type<Optional<T>> nullable() {
