@@ -71,7 +71,7 @@ public class Database {
         }
     }
 
-    public Table createTable(String name) {
+    public Table.Builder createTable(String name) {
         return Table.of(this, name);
     }
 
