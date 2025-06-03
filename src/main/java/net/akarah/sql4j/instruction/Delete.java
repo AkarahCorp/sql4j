@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Delete<T> implements Instruction<T> {
-    Table table;
+    Table.Impl table;
     List<Value<Boolean>> where = new ArrayList<>();
 
-    public static <T> Delete<T> from(Table table) {
+    public static <T> Delete<T> from(Table.Impl table) {
         var sel = new Delete<T>();
         sel.table = table;
         return sel;

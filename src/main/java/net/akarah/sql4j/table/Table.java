@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface Table extends Value<Table> {
-    String name();
+
 
     static Table.Builder of(Database database, String name) {
         var table = new Table.Builder();
@@ -27,7 +27,7 @@ public interface Table extends Value<Table> {
             return this;
         }
 
-        public Table createIfNotExists() {
+        public Table.Impl createIfNotExists() {
             var sb = new StringBuilder();
             sb.append("CREATE TABLE IF NOT EXISTS ")
                     .append(this.name)
@@ -49,7 +49,7 @@ public interface Table extends Value<Table> {
             return this;
         }
 
-        public Table build() {
+        public Table.Impl build() {
             var impl = new Impl();
 
             for(var column : this.columns) {
@@ -69,7 +69,6 @@ public interface Table extends Value<Table> {
         String name;
         List<Column<?>> columns = new ArrayList<>();
 
-
         private Impl() {}
 
         public String name() {
@@ -79,6 +78,22 @@ public interface Table extends Value<Table> {
         @Override
         public String toSql() {
             return this.name();
+        }
+
+        public <T> Table.InnerJoinOn<T> innerJoinOn(
+                Table.Impl other,
+                Column<T> leftColumn,
+                Column<T> rightColumn
+        ) {
+            return new InnerJoinOn<T>(this, other, leftColumn, rightColumn);
+        }
+    }
+
+    record InnerJoinOn<T>(Table.Impl left, Table.Impl right, Column<T> leftColumn, Column<T> rightColumn) implements Table {
+
+        @Override
+        public String toSql() {
+            return left.name() + " INNER JOIN " + right.name() + " ON " + leftColumn.tabledName() + " = " + rightColumn.tabledName();
         }
     }
 }

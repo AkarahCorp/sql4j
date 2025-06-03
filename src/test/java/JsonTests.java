@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class JsonTests {
     public static Column<JsonElement> JSON_COLUMN = Column.of("json_column", Type.jsonb());
 
-    public static Table JSON_TABLE = Table.of(TestHelpers.DATABASE, "json_table")
+    public static Table.Impl JSON_TABLE = Table.of(TestHelpers.DATABASE, "json_table")
             .withColumn(JSON_COLUMN)
             .dropIfExists()
             .createIfNotExists();

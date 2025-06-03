@@ -2,11 +2,10 @@ package net.akarah.sql4j.table;
 
 import net.akarah.sql4j.SqlConvertible;
 import net.akarah.sql4j.value.expr.Value;
-import net.akarah.sql4j.value.expr.Values;
 import net.akarah.sql4j.value.Type;
 
 public class Column<T> implements SqlConvertible, Value<T> {
-    Table table;
+    Table.Impl table;
     String name;
     Type<T> type;
     Value<T> defaultValue;

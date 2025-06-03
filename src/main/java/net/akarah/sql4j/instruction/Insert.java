@@ -19,7 +19,7 @@ public final class Insert<O> implements Instruction<O> {
     List<Value<?>> values = new ArrayList<>();
     Column<O> returning;
 
-    public static Insert<Void> into(Table table) {
+    public static Insert<Void> into(Table.Impl table) {
         var insert = new Insert();
         insert.table = table;
         return insert;
@@ -62,7 +62,7 @@ public final class Insert<O> implements Instruction<O> {
     @Override
     public String toSql() {
         return "INSERT INTO " +
-                this.table.name() +
+                this.table.toSql() +
                 StringUtils.parenthesizedValues(this.columns, Column::name) +
                 " VALUES " +
                 StringUtils.parenthesizedValues(this.values, SqlConvertible::toSql) +

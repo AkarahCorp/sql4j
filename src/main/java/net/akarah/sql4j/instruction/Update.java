@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Update<T> implements Instruction<T> {
-    Table table;
+    Table.Impl table;
     List<Tuple.Of2<Column<?>, Value<?>>> columnsToSet = new ArrayList<>();
     List<Value<Boolean>> where = new ArrayList<>();
 
-    public static <T> Update<T> table(Table table) {
+    public static <T> Update<T> table(Table.Impl table) {
         var sel = new Update<T>();
         sel.table = table;
         return sel;
