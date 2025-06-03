@@ -15,8 +15,21 @@ public final class Conversions {
     public static <T> T getValueFromList(List<Object> objects) {
         return switch (objects.size()) {
             case 1 -> convertToSql(objects.getFirst());
-            case 2 -> (T) new Tuple.Of2<>(convertToSql(objects.getFirst()), convertToSql(objects.get(1)));
-            case 3 -> (T) new Tuple.Of3<>(convertToSql(objects.getFirst()), convertToSql(objects.get(1)), convertToSql(objects.get(2)));
+            case 2 -> (T) new Tuple.Of2<>(
+                    convertToSql(objects.getFirst()),
+                    convertToSql(objects.get(1))
+            );
+            case 3 -> (T) new Tuple.Of3<>(
+                    convertToSql(objects.getFirst()),
+                    convertToSql(objects.get(1)),
+                    convertToSql(objects.get(2))
+            );
+            case 4 -> (T) new Tuple.Of4<>(
+                    convertToSql(objects.getFirst()),
+                    convertToSql(objects.get(1)),
+                    convertToSql(objects.get(2)),
+                    convertToSql(objects.get(3))
+            );
             default -> throw new RuntimeException("not possible, too many columns :P");
         };
     }

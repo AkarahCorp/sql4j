@@ -39,6 +39,36 @@ public final class Select<T> implements Instruction<T>, Value<T> {
         return sel;
     }
 
+    public static <T1, T2, T3> Select<Tuple.Of3<T1, T2, T3>> on(
+            Value<T1> baseExpression1,
+            Value<T2> baseExpression2,
+            Value<T3> baseExpression3
+    ) {
+        var sel = new Select<Tuple.Of3<T1, T2, T3>>();
+        sel.baseValues = List.of(
+                baseExpression1,
+                baseExpression2,
+                baseExpression3
+        );
+        return sel;
+    }
+
+    public static <T1, T2, T3, T4> Select<Tuple.Of4<T1, T2, T3, T4>> on(
+            Value<T1> baseExpression1,
+            Value<T2> baseExpression2,
+            Value<T3> baseExpression3,
+            Value<T4> baseExpression4
+    ) {
+        var sel = new Select<Tuple.Of4<T1, T2, T3, T4>>();
+        sel.baseValues = List.of(
+                baseExpression1,
+                baseExpression2,
+                baseExpression3,
+                baseExpression4
+        );
+        return sel;
+    }
+
     public Select<T> from(Value<Table> table) {
         this.table = table;
         return this;
