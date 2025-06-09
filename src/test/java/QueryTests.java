@@ -2,6 +2,7 @@ import net.akarah.sql4j.instruction.Delete;
 import net.akarah.sql4j.instruction.Insert;
 import net.akarah.sql4j.instruction.Select;
 import net.akarah.sql4j.instruction.Update;
+import net.akarah.sql4j.value.Type;
 import net.akarah.sql4j.value.expr.Functions;
 import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.expr.Values;
@@ -20,21 +21,21 @@ public class QueryTests {
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("Endistic"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(17))
-                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Endi"))))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.ofList(List.of(Values.of("Endi"))))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheYoung"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(15))
-                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Young"))))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.ofEmptyList(Type.text()))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheAdult"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(19))
-                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Adult"))))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.ofEmptyList(Type.text()))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
     }
@@ -44,7 +45,7 @@ public class QueryTests {
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheUpdating"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(1550))
-                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Updater"))))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.ofEmptyList(Type.text()))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
@@ -70,7 +71,7 @@ public class QueryTests {
         try(var result = Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheIdentifiable"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(25))
-                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Id"))))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.ofEmptyList(Type.text()))
                 .returning(TestHelpers.PLAYER_ID)
                 .evaluate(TestHelpers.DATABASE)) {
 

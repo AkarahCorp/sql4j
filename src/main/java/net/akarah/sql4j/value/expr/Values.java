@@ -1,6 +1,7 @@
 package net.akarah.sql4j.value.expr;
 
 import com.google.gson.JsonElement;
+import net.akarah.sql4j.value.Type;
 import net.akarah.sql4j.value.tuple.Tuple;
 import net.akarah.sql4j.value.util.StringUtils;
 
@@ -26,8 +27,12 @@ public final class Values {
         return () -> "'" + jsonElement.toString() + "'";
     }
 
-    public static <T> StaticListValue<T> of(List<Value<T>> values) {
-        return new StaticListValue<>(values);
+    public static <T> StaticListValue<T> ofList(List<Value<T>> values) {
+        return new StaticListValue<>(values, null);
+    }
+
+    public static <T> StaticListValue<T> ofEmptyList(Type<T> values) {
+        return new StaticListValue<>(List.of(), values);
     }
 
     public static <T1, T2> Value<Tuple.Of2<T1, T2>> of(Value<T1> a, Value<T2> b) {
