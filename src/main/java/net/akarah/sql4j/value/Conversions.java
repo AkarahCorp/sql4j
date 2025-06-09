@@ -3,8 +3,11 @@ package net.akarah.sql4j.value;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import net.akarah.sql4j.value.tuple.Tuple;
+import org.postgresql.jdbc.PgArray;
 import org.postgresql.util.PGobject;
 
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 public final class Conversions {
@@ -37,13 +40,20 @@ public final class Conversions {
     // this function is safe since it's invariants are checked by the generic type system
     @SuppressWarnings("unchecked")
     public static <T> T convertToSql(Object object) {
-        return switch (object) {
-            case PGobject postgresObject -> switch (postgresObject.getType()) {
-                case "json", "jsonb" -> (T) GSON.fromJson(postgresObject.getValue(), JsonElement.class);
-                default -> throw new RuntimeException("unknown psql type " + postgresObject.getType());
+        try {
+            return switch (object) {
+                case PGobject postgresObject -> switch (postgresObject.getType()) {
+                    case "json", "jsonb" -> (T) GSON.fromJson(postgresObject.getValue(), JsonElement.class);
+                    default -> throw new RuntimeException("unknown psql type " + postgresObject.getType());
+                };
+                case PgArray array -> (T) Arrays.stream((Object[]) array.getArray())
+                        .map(Conversions::convertToSql)
+                        .toList();
+                case null -> null;
+                default -> (T) object;
             };
-            case null -> (T) null;
-            default -> (T) object;
-        };
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 }

@@ -175,13 +175,13 @@ public class QueryTests {
 
     @Test
     public void testArrays() {
-        try(var result = Select.on(TestHelpers.PLAYER_NICKNAMES.subscript(Values.of(1)))
+        try(var result = Select.on(TestHelpers.PLAYER_NICKNAMES)
                 .from(TestHelpers.PLAYERS_TABLE)
                 .where(TestHelpers.PLAYER_NAME.equals(Values.of("Endistic")))
                 .evaluate(TestHelpers.DATABASE)) {
             var row = result.next();
             assert row.isPresent();
-            assert row.get().equals("Endi");
+            assert row.get().getFirst().equals("Endi");
         }
     }
 }
