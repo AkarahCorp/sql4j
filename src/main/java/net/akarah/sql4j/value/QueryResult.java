@@ -2,6 +2,7 @@ package net.akarah.sql4j.value;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -48,7 +49,7 @@ public sealed interface QueryResult<T> extends AutoCloseable {
         public Optional<T> next() {
             try {
                 if(this.resultSet.next()) {
-                    return Optional.of(this.listFunction.apply(this.resultSet));
+                    return Optional.ofNullable(this.listFunction.apply(this.resultSet));
                 } else {
                     return Optional.empty();
                 }

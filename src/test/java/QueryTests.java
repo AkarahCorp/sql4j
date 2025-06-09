@@ -7,6 +7,8 @@ import net.akarah.sql4j.value.expr.Value;
 import net.akarah.sql4j.value.expr.Values;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
+
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class QueryTests {
     static {
@@ -18,18 +20,21 @@ public class QueryTests {
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("Endistic"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(17))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Endi"))))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheYoung"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(15))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Young"))))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheAdult"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(19))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Adult"))))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
     }
@@ -39,6 +44,7 @@ public class QueryTests {
         Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheUpdating"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(1550))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Updater"))))
                 .evaluate(TestHelpers.DATABASE)
                 .close();
 
@@ -64,6 +70,7 @@ public class QueryTests {
         try(var result = Insert.into(TestHelpers.PLAYERS_TABLE)
                 .withValue(TestHelpers.PLAYER_NAME, Values.of("TheIdentifiable"))
                 .withValue(TestHelpers.PLAYER_AGE, Values.of(25))
+                .withValue(TestHelpers.PLAYER_NICKNAMES, Values.of(List.of(Values.of("Id"))))
                 .returning(TestHelpers.PLAYER_ID)
                 .evaluate(TestHelpers.DATABASE)) {
 
@@ -163,6 +170,18 @@ public class QueryTests {
             var row = result.next();
             assert row.isPresent();
             assert row.get() == 2;
+        }
+    }
+
+    @Test
+    public void testArrays() {
+        try(var result = Select.on(TestHelpers.PLAYER_NICKNAMES.subscript(Values.of(1)))
+                .from(TestHelpers.PLAYERS_TABLE)
+                .where(TestHelpers.PLAYER_NAME.equals(Values.of("Endistic")))
+                .evaluate(TestHelpers.DATABASE)) {
+            var row = result.next();
+            assert row.isPresent();
+            assert row.get().equals("Endi");
         }
     }
 }

@@ -42,6 +42,7 @@ public final class Conversions {
                 case "json", "jsonb" -> (T) GSON.fromJson(postgresObject.getValue(), JsonElement.class);
                 default -> throw new RuntimeException("unknown psql type " + postgresObject.getType());
             };
+            case null -> (T) null;
             default -> (T) object;
         };
     }
