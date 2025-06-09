@@ -107,7 +107,7 @@ public class Database {
     }
 
     public void execute(Instruction<?> instruction) {
-        var fmtStmt = instruction.toSql().replace("\n", "").replace(",)", ")");
+        var fmtStmt = instruction.toSql().replace("\n", "").replace(",)", ")") + ";";
 
         try {
             var stmt = this.connection().prepareStatement(fmtStmt);

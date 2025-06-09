@@ -114,6 +114,22 @@ public class QueryTests {
     }
 
     @Test
+    public void selectionNestedSelect() {
+        try(var result =
+                    Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)
+                            .from(TestHelpers.PLAYERS_TABLE)
+                            .where(TestHelpers.PLAYER_AGE.greaterThan(
+                                    Select.on(Values.of(9).add(Values.of(9)))
+                            ))
+                            .where(TestHelpers.PLAYER_NAME.notEquals(Values.of("TheUpdated")))
+                            .evaluate(TestHelpers.DATABASE)) {
+
+            assert result.next().isPresent();
+            assert result.next().isEmpty();
+        }
+    }
+
+    @Test
     public void selectionOrderedBy() {
         try(var result =
                     Select.on(TestHelpers.PLAYER_NAME, TestHelpers.PLAYER_AGE)

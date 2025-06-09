@@ -23,7 +23,7 @@ public class SubtypedColumn<I, O, T> extends Column<T> implements SubtypedValue<
     @Override
     public Value<O> subscript(Value<I> value) {
         return Values.ofFunctions(
-                () -> this.toSql() + "[" + value.toSql() + "]",
+                () -> this.valueSql() + "[" + value.valueSql() + "]",
                 this::column
         );
     }

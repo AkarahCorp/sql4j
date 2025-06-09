@@ -5,56 +5,56 @@ import net.akarah.sql4j.table.Column;
 public class Functions {
     public static <T> Value<Long> count(Column<T> value) {
         return Values.ofFunctions(
-                () -> "COUNT(" + value.toSql() + ")",
+                () -> "COUNT(" + value.valueSql() + ")",
                 () -> "count"
         );
     }
 
     public static <T> Value<Long> sum(Column<T> value) {
         return Values.ofFunctions(
-                () -> "SUM(" + value.toSql() + ")",
+                () -> "SUM(" + value.valueSql() + ")",
                 () -> "sum"
         );
     }
 
     public static <T extends Number> Value<T> abs(Value<T> value) {
         return Values.ofFunctions(
-                () -> "abs(" + value.toSql() + ")",
+                () -> "abs(" + value.valueSql() + ")",
                 () -> "abs"
         );
     }
 
     public static <T extends Number> Value<T> sqrt(Value<T> value) {
         return Values.ofFunctions(
-                () -> "sqrt(" + value.toSql() + ")",
+                () -> "sqrt(" + value.valueSql() + ")",
                 () -> "sqrt"
         );
     }
 
     public static <T extends Number> Value<T> ceil(Value<T> value) {
         return Values.ofFunctions(
-                () -> "ceil(" + value.toSql() + ")",
+                () -> "ceil(" + value.valueSql() + ")",
                 () -> "ceil"
         );
     }
 
     public static <T extends Number> Value<T> floor(Value<T> value) {
         return Values.ofFunctions(
-                () -> "floor(" + value.toSql() + ")",
+                () -> "floor(" + value.valueSql() + ")",
                 () -> "floor"
         );
     }
 
     public static <T extends Number> Value<T> degrees(Value<T> value) {
         return Values.ofFunctions(
-                () -> "degrees(" + value.toSql() + ")",
+                () -> "degrees(" + value.valueSql() + ")",
                 () -> "degrees"
         );
     }
 
     public static <T extends Number> Value<T> truncate(Value<T> value, Value<Integer> bits) {
         return Values.ofFunctions(
-                () -> "trunc(" + value.toSql() + ", " + bits.toSql() + ")",
+                () -> "trunc(" + value.valueSql() + ", " + bits.valueSql() + ")",
                 () -> "trunc"
         );
     }

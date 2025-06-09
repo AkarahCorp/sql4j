@@ -41,7 +41,7 @@ public final class Update<T> implements Instruction<T> {
             sb.append(" SET ");
             sb.append(StringUtils.groupedValues(
                     columnsToSet,
-                    column -> column.a().name() + " = " + column.b().toSql(),
+                    column -> column.a().name() + " = " + column.b().valueSql(),
                     " && "
             ));
         }
@@ -49,11 +49,10 @@ public final class Update<T> implements Instruction<T> {
             sb.append(" WHERE ");
             sb.append(StringUtils.groupedValues(
                     this.where,
-                    x -> "(" + x.toSql() + ")",
+                    x -> "(" + x.valueSql() + ")",
                     " AND "
             ));
         }
-        sb.append(";");
         return sb.toString();
     }
 

@@ -62,11 +62,10 @@ public final class Insert<O> implements Instruction<O> {
     @Override
     public String toSql() {
         return "INSERT INTO " +
-                this.table.toSql() +
+                this.table.valueSql() +
                 StringUtils.parenthesizedValues(this.columns, Column::name) +
                 " VALUES " +
-                StringUtils.parenthesizedValues(this.values, SqlConvertible::toSql) +
-                (this.returning == null ? "" : " RETURNING " + this.returning.name()) +
-                ";";
+                StringUtils.parenthesizedValues(this.values, Value::valueSql) +
+                (this.returning == null ? "" : " RETURNING " + this.returning.name());
     }
 }

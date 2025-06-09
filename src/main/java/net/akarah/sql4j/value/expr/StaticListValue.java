@@ -30,6 +30,6 @@ public class StaticListValue<T> implements Value<List<T>>, SubtypedValue<Integer
 
     @Override
     public Value<T> subscript(Value<Integer> value) {
-        return () -> this.toSql() + "[" + value + "]";
+        return () -> this.valueSql() + "[" + value + "]";
     }
 }

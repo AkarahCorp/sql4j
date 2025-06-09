@@ -105,36 +105,35 @@ public final class Select<T> implements Instruction<T>, Value<T> {
     public String toSql() {
         var sb = new StringBuilder();
         sb.append("SELECT ");
-        sb.append(StringUtils.groupedValues(baseValues, Value::toSql));
+        sb.append(StringUtils.groupedValues(baseValues, Value::valueSql));
         if(this.table != null) {
             sb.append(" FROM ");
-            sb.append(this.table.toSql());
+            sb.append(this.table.valueSql());
         }
         if(!this.conditions.isEmpty()) {
             sb.append(" WHERE ");
             sb.append(
                     StringUtils.groupedValues(
                             this.conditions,
-                            x -> "(" + x.toSql() + ")",
+                            x -> "(" + x.valueSql() + ")",
                             " AND "
                     )
             );
         }
         if(this.orderBy != null) {
             sb.append(" ORDER BY ");
-            sb.append(this.orderBy.toSql());
+            sb.append(this.orderBy.valueSql());
             sb.append(" ");
             sb.append(this.ordering);
         }
         if(this.limit != null) {
             sb.append(" LIMIT ");
-            sb.append(this.limit.toSql());
+            sb.append(this.limit.valueSql());
         }
         if(this.offset != null) {
             sb.append(" OFFSET ");
-            sb.append(this.offset.toSql());
+            sb.append(this.offset.valueSql());
         }
-        sb.append(";");
         return sb.toString();
     }
 
@@ -154,5 +153,10 @@ public final class Select<T> implements Instruction<T>, Value<T> {
 
         );
         return queryResult;
+    }
+
+    @Override
+    public String valueSql() {
+        return "(" + this.toSql() + ")";
     }
 }

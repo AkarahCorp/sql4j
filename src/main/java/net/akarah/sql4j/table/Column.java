@@ -26,7 +26,7 @@ public class Column<T> implements SqlConvertible, Value<T> {
         return name
                 + " " + type.toSql()
                 + (type.isNullable() ? "" : " NOT NULL")
-                + (defaultValue == null ? "" : " DEFAULT " + defaultValue.toSql());
+                + (defaultValue == null ? "" : " DEFAULT " + defaultValue.valueSql());
     }
 
     public String toSql() {
