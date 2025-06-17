@@ -38,4 +38,12 @@ public interface Value<T> extends SqlConvertible {
     default Value<Boolean> lessThanOrEquals(Value<T> other) {
         return () -> this.valueSql() + " <= " + other.valueSql();
     }
+
+    default Value<Boolean> like(Value<T> other) {
+        return () -> this.valueSql() + " LIKE " + other.valueSql();
+    }
+
+    default Value<Boolean> caseInsensitiveLike(Value<T> other) {
+        return () -> this.valueSql() + " ILIKE " + other.valueSql();
+    }
 }
