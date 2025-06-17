@@ -17,7 +17,7 @@ public interface Type<T> {
         return () -> "int";
     }
 
-    static Type<Short> smallint() {
+    static Type<Integer> smallint() {
         return () -> "smallint";
     }
 
@@ -29,7 +29,7 @@ public interface Type<T> {
         return () -> "serial";
     }
 
-    static Type<Short> smallSerial() {
+    static Type<Integer> smallSerial() {
         return () -> "smallserial";
     }
 
