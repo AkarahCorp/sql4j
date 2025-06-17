@@ -27,6 +27,10 @@ public final class Values {
         return () -> "'" + jsonElement.toString() + "'";
     }
 
+    public static Value<Boolean> of(boolean bool) {
+        return () -> Boolean.toString(bool);
+    }
+
     public static <T> StaticListValue<T> ofList(List<Value<T>> values) {
         return new StaticListValue<>(values, null);
     }

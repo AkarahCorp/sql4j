@@ -49,6 +49,10 @@ public interface Type<T> {
         return () -> "jsonb";
     }
 
+    static Type<Boolean> bool() {
+        return () -> "boolean";
+    }
+
     static <T, T2 extends Type<T>> SubtypedType<Integer, T, List<T>> listOf(T2 type) {
         return () -> type.toSql() + " ARRAY";
     }
